@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نتائج استبيان الهاكاثون — حاضنة ابتكار 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --navy:  #14144f;
+  --navy2: #1a1a63;
+  --teal:  #00bf9c;
+  --teal2: #17c5a5;
+  --gold:  #fcc242;
+  --purp:  #c875d8;
+  --green: #63d654;
+  --blue:  #7a9cf7;
+  --red:   #e06b7a;
+  --bg:    #14144f;
+  --s1:    rgba(255,255,255,0.04);
+  --s2:    rgba(255,255,255,0.07);
+  --bdr:   rgba(0,191,156,0.18);
+  --text:  rgba(255,255,255,0.92);
+  --dim:   rgba(255,255,255,0.50);
+  --faint: rgba(255,255,255,0.22);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+}
+
+/* ══ HEADER ══ */
+.hdr {
+  background: var(--navy);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 0 40px;
+}
+.hdr-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 0 18px;
+}
+.brand { display: flex; align-items: flex-start; gap: 9px; }
+.brand .b5 {
+  border: 2px solid var(--teal); border-radius: 5px;
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; color: var(--teal);
+  flex-shrink: 0; margin-top: 3px;
+}
+.brand .ar { font-size: 19px; font-weight: 700; }
+.brand .en { font-size: 10px; color: var(--dim); letter-spacing: .6px; }
+
+.hdr-title {
+  font-size: 14px; font-weight: 600; color: var(--dim);
+  display: flex; align-items: center; gap: 8px;
+}
+.hdr-title::before {
+  content:''; width:3px; height:16px;
+  background:var(--teal); border-radius:2px;
+}
+
+/* موجات الهوية */
+.wave-bar {
+  height: 44px; display: flex; align-items: flex-end;
+  gap: 3px; padding: 0 4px;
+}
+.wb { border-radius: 2px 2px 0 0; animation: wv 2s ease-in-out infinite alternate; }
+@keyframes wv { from{opacity:.35;transform:scaleY(.5)} to{opacity:1;transform:scaleY(1)} }
+
+/* ══ BODY ══ */
+.body { padding: 28px 40px 60px; }
+
+/* ══ KPI STRIP ══ */
+.kpi-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px; overflow: hidden;
+  margin-bottom: 24px;
+}
+.kpi-box {
+  padding: 24px 20px;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+}
+.kpi-box:last-child { border-left: none; }
+.kpi-box::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+}
+.kpi-box.kt::after { background:var(--teal); }
+.kpi-box.kg::after { background:var(--gold); }
+.kpi-box.kp::after { background:var(--purp); }
+.kpi-box.kgr::after { background:var(--green); }
+.kpi-ico { font-size: 22px; margin-bottom: 10px; }
+.kpi-n {
+  font-size: 50px; font-weight: 900; line-height: 1; margin-bottom: 5px;
+}
+.kpi-box.kt .kpi-n { color: var(--teal); }
+.kpi-box.kg .kpi-n { color: var(--gold); }
+.kpi-box.kp .kpi-n { color: var(--purp); }
+.kpi-box.kgr .kpi-n { color: var(--green); }
+.kpi-l { font-size: 13px; color: var(--dim); }
+.kpi-s { font-size: 10px; color: var(--faint); margin-top: 3px; font-family:'IBM Plex Mono',monospace; }
+
+/* ══ SECTION LABEL ══ */
+.sec-lbl {
+  font-size: 11px; font-weight: 700; color: var(--teal);
+  letter-spacing: 1.6px; text-transform: uppercase;
+  margin: 28px 0 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.sec-lbl::after {
+  content:''; flex:1; height:1px;
+  background: linear-gradient(90deg, var(--bdr), transparent);
+}
+
+/* ══ CHARTS GRID ══ */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+
+/* ══ CARD ══ */
+.card {
+  background: var(--s1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px; padding: 22px 20px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: rgba(0,191,156,0.3); }
+.card-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.card-ttl {
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; gap: 7px;
+}
+.card-ttl .ic { font-size: 15px; opacity: .75; }
+.badge {
+  font-size: 10px; color: var(--faint);
+  background: var(--s2); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 100px; padding: 3px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ══ RATING CARD (نسبة الرضا) ══ */
+.rating-card {
+  background: var(--s1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 18px;
+  position: relative; overflow: hidden;
+  transition: all .22s;
+}
+.rating-card:hover { border-color: rgba(0,191,156,0.3); transform: translateY(-2px); }
+.rating-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2.5px;
+  border-radius:16px 16px 0 0;
+  background: var(--rc-color, var(--teal));
+}
+.rc-label {
+  font-size: 12px; font-weight: 600; color: var(--dim);
+  margin-bottom: 12px; line-height: 1.4;
+  min-height: 36px;
+}
+.rc-pct {
+  font-size: 38px; font-weight: 900; line-height: 1;
+  color: var(--rc-color, var(--teal));
+  margin-bottom: 4px;
+}
+.rc-sub { font-size: 10px; color: var(--faint); margin-bottom: 10px; }
+.rc-bar {
+  height: 5px; background: rgba(255,255,255,0.08);
+  border-radius: 100px; overflow: hidden;
+}
+.rc-fill {
+  height: 100%; border-radius: 100px;
+  background: var(--rc-color, var(--teal));
+  transition: width 1.2s cubic-bezier(.16,1,.3,1);
+}
+
+/* ══ YES/NO CARD ══ */
+.yn-card {
+  background: var(--s1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 18px;
+  transition: all .22s;
+}
+.yn-card:hover { border-color: rgba(0,191,156,0.25); }
+.yn-label { font-size: 12px; color: var(--dim); margin-bottom: 14px; line-height: 1.4; font-weight: 600; }
+.yn-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.yn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.yn-name { font-size: 12px; flex: 1; }
+.yn-pct-wrap { display: flex; align-items: center; gap: 8px; flex: 2; }
+.yn-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+.yn-bar-fill { height: 100%; border-radius: 100px; }
+.yn-num { font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--faint); min-width: 38px; text-align: left; }
+
+/* ══ FOOTER ══ */
+.footer {
+  margin-top: 48px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: var(--faint);
+}
+.footer .mono { font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
+
+canvas { display: block; width: 100% !important; }
+
+@media(max-width:1100px) {
+  .kpi-strip { grid-template-columns: repeat(2,1fr); }
+  .grid3, .grid4 { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:700px) {
+  .body { padding: 16px; }
+  .hdr { padding: 0 16px; }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="hdr">
+  <div class="hdr-top">
+    <div class="brand">
+      <div class="b5">5</div>
+      <div>
+        <div class="ar">حاضنة ابتكار</div>
+        <div class="en">Innovation Incubator</div>
+      </div>
+    </div>
+    <div class="hdr-title">📋 نتائج استبيان رضا المشاركين — الهاكاثون</div>
+  </div>
+  <div class="wave-bar" id="waveBars"></div>
+</header>
+
+<!-- ══ BODY ══ -->
+<div class="body">
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-box kt">
+      <div class="kpi-ico">📋</div>
+      <div class="kpi-n">244</div>
+      <div class="kpi-l">إجمالي الردود</div>
+      <div class="kpi-s">استبيان الهاكاثون</div>
+    </div>
+    <div class="kpi-box kg">
+      <div class="kpi-ico">⭐</div>
+      <div class="kpi-n">95.2%</div>
+      <div class="kpi-l">رضا التجربة العامة</div>
+      <div class="kpi-s">ممتاز + جيد جداً</div>
+    </div>
+    <div class="kpi-box kp">
+      <div class="kpi-ico">🆕</div>
+      <div class="kpi-n">76.5%</div>
+      <div class="kpi-l">أول مشاركة في هاكاثون</div>
+      <div class="kpi-s">185 من 244 مشارك</div>
+    </div>
+    <div class="kpi-box kgr">
+      <div class="kpi-ico">✅</div>
+      <div class="kpi-n">76.5%</div>
+      <div class="kpi-l">استفادة من الملاحظات</div>
+      <div class="kpi-s">ملاحظات المحكمين والمرشدين</div>
+    </div>
+  </div>
+
+  <!-- قسم: تقييم الجوانب التنظيمية -->
+  <div class="sec-lbl">تقييم الجوانب التنظيمية</div>
+  <div class="grid4">
+    <div class="rating-card" style="--rc-color:var(--teal)">
+      <div class="rc-label">التنظيم العام للهاكاثون</div>
+      <div class="rc-pct">93.9%</div>
+      <div class="rc-sub">ممتاز 77.9% · جيد جداً 16.0%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:93.9%"></div></div>
+    </div>
+    <div class="rating-card" style="--rc-color:var(--gold)">
+      <div class="rc-label">سهولة الوصول إلى مكان الحدث</div>
+      <div class="rc-pct">95.2%</div>
+      <div class="rc-sub">ممتاز 86.9% · جيد جداً 8.6%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:95.5%"></div></div>
+    </div>
+    <div class="rating-card" style="--rc-color:var(--purp)">
+      <div class="rc-label">الضيافة ومستوى الطعام</div>
+      <div class="rc-pct">88.9%</div>
+      <div class="rc-sub">ممتاز 73.0% · جيد جداً 16.0%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:88.9%"></div></div>
+    </div>
+    <div class="rating-card" style="--rc-color:var(--green)">
+      <div class="rc-label">التجربة العامة في الهاكاثون</div>
+      <div class="rc-pct">95.2%</div>
+      <div class="rc-sub">ممتاز 82.4% · جيد جداً 12.7%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:95.5%"></div></div>
+    </div>
+  </div>
+
+  <!-- قسم: تقييم الإرشاد والتحكيم -->
+  <div class="sec-lbl">تقييم الإرشاد والتحكيم</div>
+  <div class="grid3">
+    <div class="rating-card" style="--rc-color:var(--teal)">
+      <div class="rc-label">برنامج الإرشاد خلال الهاكاثون</div>
+      <div class="rc-pct">83.6%</div>
+      <div class="rc-sub">ممتاز 66.0% · جيد جداً 17.6%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:83.6%"></div></div>
+    </div>
+    <div class="rating-card" style="--rc-color:var(--gold)">
+      <div class="rc-label">التفاعل مع المحكمين في التحكيم</div>
+      <div class="rc-pct">88.1%</div>
+      <div class="rc-sub">ممتاز 74.2% · جيد جداً 13.9%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:88.1%"></div></div>
+    </div>
+    <div class="rating-card" style="--rc-color:var(--purp)">
+      <div class="rc-label">التفاعل مع المرشدين في الإرشاد</div>
+      <div class="rc-pct">88.5%</div>
+      <div class="rc-sub">ممتاز 73.8% · جيد جداً 14.8%</div>
+      <div class="rc-bar"><div class="rc-fill" style="width:88.5%"></div></div>
+    </div>
+  </div>
+
+  <!-- قسم: مدى الاستفادة -->
+  <div class="sec-lbl">مدى استفادة المشاركين</div>
+  <div class="grid3">
+
+    <div class="yn-card">
+      <div class="yn-label">الجلسات الإرشادية مفيدة لمشروعك؟</div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--teal)"></div>
+        <div class="yn-name">نعم</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:70.9%;background:var(--teal)"></div></div>
+          <div class="yn-num">173 — 70.9%</div>
+        </div>
+      </div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--gold)"></div>
+        <div class="yn-name">إلى حد ما</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:23.8%;background:var(--gold)"></div></div>
+          <div class="yn-num">58 — 23.8%</div>
+        </div>
+      </div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--red)"></div>
+        <div class="yn-name">لا</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:5.3%;background:var(--red)"></div></div>
+          <div class="yn-num">13 — 5.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="yn-card">
+      <div class="yn-label">ملاحظات المحكمين والمرشدين مفيدة؟</div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--teal)"></div>
+        <div class="yn-name">نعم</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:77.9%;background:var(--teal)"></div></div>
+          <div class="yn-num">190 — 77.9%</div>
+        </div>
+      </div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--gold)"></div>
+        <div class="yn-name">إلى حد ما</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:18.9%;background:var(--gold)"></div></div>
+          <div class="yn-num">46 — 18.9%</div>
+        </div>
+      </div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--red)"></div>
+        <div class="yn-name">لا</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:3.3%;background:var(--red)"></div></div>
+          <div class="yn-num">8 — 3.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="yn-card">
+      <div class="yn-label">ورش العمل مفيدة لتطوير مشروعك؟</div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--teal)"></div>
+        <div class="yn-name">نعم</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:70.1%;background:var(--teal)"></div></div>
+          <div class="yn-num">171 — 70.1%</div>
+        </div>
+      </div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--gold)"></div>
+        <div class="yn-name">إلى حد ما</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:23.0%;background:var(--gold)"></div></div>
+          <div class="yn-num">56 — 23.0%</div>
+        </div>
+      </div>
+      <div class="yn-row">
+        <div class="yn-dot" style="background:var(--red)"></div>
+        <div class="yn-name">لا</div>
+        <div class="yn-pct-wrap">
+          <div class="yn-bar-track"><div class="yn-bar-fill" style="width:7.0%;background:var(--red)"></div></div>
+          <div class="yn-num">17 — 7.0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم: ورش العمل + خبرة المشاركين -->
+  <div class="sec-lbl">ورش العمل وخبرة المشاركين</div>
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-ttl"><span class="ic">🎓</span>تقييم ورش العمل المقدّمة</div>
+        <div class="badge">244 مشارك</div>
+      </div>
+      <canvas id="workshopsChart" height="200"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-ttl"><span class="ic">🏁</span>خبرة المشاركين بالهاكاثونات</div>
+        <div class="badge">244 مشارك</div>
+      </div>
+      <canvas id="experienceChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- مخطط رادار للمقارنة الشاملة -->
+  <div class="sec-lbl">مقارنة شاملة لمستوى الرضا</div>
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-ttl"><span class="ic">📊</span>نسب الرضا العالية (ممتاز + جيد جداً) لكل محور</div>
+      <div class="badge">% من 244 مشارك</div>
+    </div>
+    <canvas id="overallChart" height="120"></canvas>
+  </div>
+
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>حاضنة ابتكار — النسخة الخامسة · جامعة القصيم · مركز الابتكار والملكية الفكرية</span>
+    <span class="mono">244 مستجيب · استبيان الهاكاثون · 2026</span>
+  </div>
+</div>
+
+<script>
+/* ── موجات الهيدر ── */
+const wDefs = [36,20,44,16,40,24,48,18,34,22,46,14,42,26,32,20,50,22,38,28,44,16,40,24,36];
+const wClrs = ['#00bf9c','#fcc242','#c875d8','#63d654','#7a9cf7'];
+document.getElementById('waveBars').innerHTML = wDefs.map((h,i)=>
+  `<div class="wb" style="width:4px;height:${h}px;background:${wClrs[i%wClrs.length]};animation-delay:${i*.06}s;border-radius:2px 2px 0 0;"></div>`
+).join('');
+
+/* ── Chart defaults ── */
+Chart.defaults.color = 'rgba(255,255,255,0.65)';
+Chart.defaults.font.family = "'Tajawal',sans-serif";
+const grid = 'rgba(255,255,255,0.07)';
+
+/* ── ورش العمل ── */
+new Chart(document.getElementById('workshopsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['ممتاز','جيد جداً','جيد','متوسط','ضعيف'],
+    datasets: [{
+      data: [161, 48, 24, 6, 5],
+      backgroundColor: ['#00bf9c','#fcc242','#7a9cf7','#c875d8','#e06b7a'],
+      borderRadius: 10, borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: grid } },
+      y: { grid: { color: grid }, beginAtZero: true }
+    }
+  }
+});
+
+/* ── خبرة المشاركين ── */
+new Chart(document.getElementById('experienceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['أول مشاركة','شارك مرتين','شارك 3 مرات','أكثر من 3'],
+    datasets: [{
+      data: [185, 23, 11, 25],
+      backgroundColor: ['#00bf9c','#fcc242','#c875d8','#63d654'],
+      borderWidth: 0, hoverOffset: 8
+    }]
+  },
+  options: {
+    cutout: '68%',
+    plugins: {
+      legend: {
+        display: true, position: 'bottom',
+        labels: { padding: 14, font: { size: 12 }, usePointStyle: true, pointStyleWidth: 9 }
+      }
+    }
+  }
+});
+
+/* ── مخطط شريطي أفقي للمقارنة ── */
+new Chart(document.getElementById('overallChart'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'التجربة العامة',
+      'سهولة الوصول',
+      'التنظيم العام',
+      'التفاعل مع المرشدين',
+      'الضيافة والطعام',
+      'التفاعل مع المحكمين',
+      'ورش العمل',
+      'برنامج الإرشاد',
+    ],
+    datasets: [{
+      label: 'نسبة الرضا العالية %',
+      data: [95.1, 95.5, 93.9, 88.5, 88.9, 88.1, 85.7, 83.6],
+      backgroundColor: [
+        '#00bf9c','#fcc242','#c875d8','#63d654',
+        '#7a9cf7','#e06b7a','#00bf9c','#fcc242'
+      ],
+      borderRadius: 8, borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.raw}%`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: grid },
+        min: 75, max: 100,
+        ticks: {
+          callback: v => v + '%'
+        }
+      },
+      y: { grid: { color: grid } }
+    }
+  }
+});
+</script>
+</body>
+</html>
